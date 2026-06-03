@@ -4,9 +4,16 @@ import time
 import climage
 from nava import play, stop
 
+# Resolve caminho dos assets mesmo dentro do .exe 
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
+
 def mostrar_imagem(caminho_imagem):
     try:
-        print(climage.convert(caminho_imagem, is_unicode=True))
+        path = resource_path(caminho_imagem)
+        print(climage.convert(path, is_unicode=True))
     except:
         pass
 
@@ -26,17 +33,24 @@ def mostrar_menu(opcoes):
         print(f"\033[1;35m[{i}]\033[0m {opcao}")
     
     while True:
-
         escolha = input("\n\033[1;35m>\033[0m Escolha: ").strip()
         if escolha.isdigit() and 1 <= int(escolha) <= len(opcoes):
             return int(escolha)
-        digitar("Opção inválida. Tente de novo.", 0.02, "\033[1;31m")
+        digitar("Opcao invalida. Tente de novo.", 0.02, "\033[1;31m")
 
 def menu_inicial():
     while True:
         limpar_tela()
-        mostrar_imagem("assets/menu.png")
-        print("\033[1;31m=== SILENCE RILL ===\n\033[0m")
+        print(r"""
+  _____ _ _                      _____  _ _ _
+ / ____(_) |                    |  __ \(_) | |
+| (___  _| | ___ _ __   ___ ___ | |__) |_| | |
+ \___ \| | |/ _ \ '_ \ / __/ _ \|  _  /| | | |
+ ____) | | |  __/ | | | (_|  __/| | \ \| | | |
+|_____/|_|_|\___|_| |_|\___\___||_|  \_\_|_|_|
+""")
+        print("\033[0;37mSilence Rill é um lugar que existe entre a memória e o arrependimento.")
+        print("Alguns entram por acidente. Outros nunca conseguem sair.\033[0m\n")
         print("\033[1;35m[1]\033[0m Jogar")
         print("\033[1;35m[2]\033[0m Sair\n")
         
@@ -53,10 +67,9 @@ def menu_inicial():
 
 def introducao():
     limpar_tela()
-    mostrar_imagem("assets/quarto.png")
-    digitar("Você acorda em um quarto escuro.", cor="\033[0;37m")
+    digitar("Você desperta lentamente, com uma sensação estranha no peito. O ar está frio e pesado. O quarto parece familiar, mas algo está errado.", cor="\033[0;37m")
     time.sleep(1)
-    digitar("A porta está trancada. Há um espelho na parede.", cor="\033[0;37m")
+    digitar("Sua cabeça dói como se tivesse esquecido algo importante. A porta está trancada e um espelho antigo ocupa a parede à sua frente.", cor="\033[0;37m")
     time.sleep(1)
     
     opcoes = ["Olhar o espelho", "Gritar", "Olhar debaixo da cama"]
@@ -72,12 +85,10 @@ def introducao():
 
 def cena_espelho():
     limpar_tela()
-    mostrar_imagem("assets/espelho.png")
-    digitar("Você olha o espelho.", cor="\033[0;37m")
-    espelho_cena = climage.convert('./espelho.avif', is_unicode=True, width=50)
-    print(espelho_cena)
+    mostrar_imagem(resource_path("espelho.avif"))
+    digitar("Você se aproxima do espelho coberto por poeira. Cada passo faz o assoalho ranger suavemente.", cor="\033[0;37m")
     time.sleep(1)
-    digitar("O seu reflexo está sorrindo, mas você não está.", cor="\033[1;31m")
+    digitar("Por um breve instante, você tem a impressão de que o reflexo se moveu antes de você.\nO seu reflexo está sorrindo, mas você não está.", cor="\033[1;31m")
     time.sleep(1)
     
     opcoes = ["Quebrar o espelho", "Fechar os olhos", "Tocar no vidro"]
@@ -111,7 +122,7 @@ def cena_atravessar_espelho():
 
 def cena_lado_invertido():
     limpar_tela()
-    digitar("Tudo aqui é cinza e o teto parece infinitamente alto.", cor="\033[0;37m")
+    digitar("O outro lado do espelho parece uma versão distorcida da realidade. Tudo é cinza, silencioso e imóvel. O teto parece infinitamente alto.", cor="\033[0;37m")
     time.sleep(1)
     digitar("No centro do cômodo vazio, há uma cadeira com correntes.", cor="\033[0;37m")
     time.sleep(1)
@@ -162,14 +173,14 @@ def cena_grito():
 
 def cena_cama():
     limpar_tela()
-    digitar("Você se agacha e olha no vão escuro debaixo da cama.", cor="\033[0;37m")
+    digitar("Você se ajoelha e afasta a poeira acumulada sob a cama. O espaço parece mais profundo do que deveria.", cor="\033[0;37m")
     time.sleep(1)
-    digitar("Sua mão toca algo frio... É uma chave antiga de ferro.", cor="\033[1;32m")
+    digitar("Enquanto tateia na escuridão, seus dedos encontram um objeto metálico e gelado. É uma chave antiga de ferro.", cor="\033[1;32m")
     time.sleep(1)
-    digitar("Há também um diário empoeirado.", cor="\033[0;37m")
+    digitar("Ao lado da chave há um diário empoeirado, com várias páginas desgastadas pelo tempo.", cor="\033[0;37m")
     time.sleep(1.5)
     
-    opcoes = ["Usar a chave na porta", "Ler o diário"]
+    opcoes = ["Usar a chave na porta", "Ler o diario"]
     escolha = mostrar_menu(opcoes)
     
     match escolha:
@@ -191,7 +202,6 @@ def cena_porta():
     print("\n\033[1;31m--- FIM: SEM SAÍDA ---\033[0m")
 
 
-
 def fim_insanidade():
     limpar_tela()
     digitar("Você quebra o espelho e corta as mãos.", cor="\033[1;31m")
@@ -209,10 +219,9 @@ def fim_capturado():
 
 def fim_verdade():
     limpar_tela()
-    mostrar_imagem("assets/diario.png")
-    digitar("Você lê o diário. O diário é seu.", cor="\033[1;32m")
+    digitar("Você abre o diário e reconhece imediatamente a caligrafia. O diário é seu.", cor="\033[1;32m")
     time.sleep(1)
-    digitar("Ele diz que você se trancou ali de propósito.", cor="\033[1;31m")
+    digitar("As páginas descrevem medo, arrependimento e uma decisão desesperada. No final, está escrito que você se trancou ali de propósito.", cor="\033[1;31m")
     time.sleep(1)
     print("\n\033[1;32m--- FIM: VOCÊ DESCOBRIU A VERDADE ---\033[0m")
     stop(musica_jogo)
@@ -227,7 +236,6 @@ def fim_preso_no_reflexo():
     print("\n\033[1;31m--- FIM: TORNANDO-SE O REFLEXO ---\033[0m")
     stop(musica_jogo)
 
-
 def fim_aceitacao():
     limpar_tela()
     digitar("Você se senta na cadeira. As correntes se prendem sozinhas.", cor="\033[1;35m")
@@ -236,7 +244,6 @@ def fim_aceitacao():
     time.sleep(1.5)
     print("\n\033[1;35m--- FIM: ETERNO COMPLACENTE ---\033[0m")
     stop(musica_jogo)
-
 
 def fim_despertar():
     limpar_tela()
@@ -248,8 +255,8 @@ def fim_despertar():
     time.sleep(2)
     print("\n\033[1;32m--- FIM: ACORDADO? ---\033[0m")
     stop(musica_jogo)
-                                          
+                           
 
 if __name__ == "__main__":
-    musica_jogo = play("musica.wav", async_mode=True, loop=True)
+    musica_jogo = play(resource_path("musica.wav"), async_mode=True, loop=True)
     menu_inicial()
