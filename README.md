@@ -16,7 +16,7 @@ Um jogo de suspense e terror baseado em texto desenvolvido para ser executado di
 ## 🛠️ Pré-requisitos
 
 Para rodar o jogo, certifique-se de ter instalado em sua máquina:
-- [Node.js](https://nodejs.org/) (versão LTS recomendada)
+- Python 
 
 ---
 
